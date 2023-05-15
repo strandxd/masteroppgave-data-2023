@@ -1,1 +1,1 @@
-# masteroppgave-data-2023
+# Master's thesis Data Science 2023
