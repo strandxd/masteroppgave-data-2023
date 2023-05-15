@@ -35,7 +35,6 @@ class CNNEmbedding(nn.Module):
                                padding="same")
 
         # max pooling layers:
-        # from shape (256x4x2000) -- (256x4x500)
         # from shape (256x4x2000) -- (256x4x1000)
         self.pool1 = nn.MaxPool1d(kernel_size=2, stride=2)
 
@@ -45,7 +44,6 @@ class CNNEmbedding(nn.Module):
                                padding="same")
 
         # max pooling layer:
-        # from shape (256x8x1000) -- (256x8x125)
         # from shape (256x8x1000) -- (256x8x500)
         self.pool2 = nn.MaxPool1d(kernel_size=2, stride=2)
 
@@ -83,30 +81,6 @@ def sbi_embedding_optimization(trial,
                                sim_sumstat_hist,
                                param_names,
                                max_epochs):
-    """
-
-
-    Parameters
-    ----------
-    trial : optuna.Trial
-        optuna object
-    prior_assumption : np.array, optional
-        distribution used for simulations (priors for sim_0)
-    df_sim : pd.DataFrame
-        param values for synapse strength. Use df_sim[param_names] to access parameters
-    sim_sumstat_hist : torch.tensor
-        sumstats (histogram)
-    param_names : list
-        list of parameter names
-    max_epochs : int
-        maximum number of epochs
-
-    Returns
-    -------
-    float
-        average rmspe (as metric for optimization)
-
-    """
     # Parameters to optimize
     hidden_features = trial.suggest_int("hidden_features", 32, 256)
     num_transforms = trial.suggest_int("num_transforms", 2, 14)
@@ -205,8 +179,8 @@ if __name__ == "__main__":
         sumstat_simulation_hist = helper_funcs.load_file(
             Path(f"../data/sim_{simulation}/sbi_embedding/2pop_simulations_histogram_{simulation}"))
 
-    # todo: this scales both channels equally
-    ## Min-max scale histograms
+    # this scales both channels equally
+    ## scale histograms
     # Scale simulations
     # scaler = MinMaxScaler()
     scaler = StandardScaler()
@@ -221,7 +195,7 @@ if __name__ == "__main__":
     temp_obs = sumstat_observation_hist.reshape((-1, 1))
     sumstat_observation_hist = torch.tensor(scaler.fit_transform(temp_obs).reshape((2, 2000)))
 
-    # # todo: this scales both channels individually
+    # # this scales both channels individually
     # # Min-max scale histograms
     # # Scale simulations
     # for i in range(sumstat_simulation_hist.shape[0]):

@@ -111,7 +111,6 @@ if __name__ == "__main__":
             Path(f"../data/sim_{simulation}/sbi_simple/2pop_simulations_{simulation}"))
 
     # Priors from previous simulation (uniform prior for simulation 0)
-    # todo: discuss if I should always pass uniform priors to sbi or update for further sims
     if simulation == 0:
         # Order: g_ee, g_ie, g_ei, g_ii
         prior_min = [0.5, 0.5, -16.0, -16.0]
